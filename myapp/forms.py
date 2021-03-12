@@ -18,6 +18,15 @@ class ContactForm(forms.Form):
         self.helper = FormHelper
         self.helper.form_method = 'post'
 
+        self.helper.layout = Layout(
+            'name',
+            'email',
+            'category',
+            'subject',
+            'body',
+            Submit('submit', 'Submit', css_class='btn-success')
+        )
+
 
 class SnippetForm(forms.ModelForm):
 
