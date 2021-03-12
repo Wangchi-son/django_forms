@@ -1,4 +1,5 @@
 from django import forms
+from .models import Snippet
 
 
 class ContactForm(forms.Form):
@@ -8,3 +9,10 @@ class ContactForm(forms.Form):
         choices=[('question', 'Question'), ('other', 'Other')])
     subject = forms.CharField(required=False)
     body = forms.CharField(widget=forms.Textarea)
+
+
+class SnippetForm(forms.ModelForm):
+
+    class Meta:
+        model = Snippet
+        fields = ('name', 'body')
