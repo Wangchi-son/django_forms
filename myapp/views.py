@@ -23,7 +23,7 @@ def snippet_detail(request):
     if request.method == 'POST':
         form = SnippetForm(request.POST)
         if form.is_valid():
-            print("VALID")
+            form.save()
 
     form = SnippetForm()
     return render(request, 'form.html', {'form': form})
