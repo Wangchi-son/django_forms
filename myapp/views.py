@@ -14,7 +14,9 @@ def contact(request):
 
             print(name, email)
 
-    form = ContactForm()
+    else:
+        form = ContactForm()
+
     return render(request, 'form.html', {'form': form})
 
 

@@ -2,10 +2,52 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django import forms
 from .models import Snippet
+from django.core.validators import RegexValidator
+
+
+class NameWidget(forms.MultiWidget):
+
+    def __init__(self, atters=None):
+        super().__init__([
+            forms.TextInput(),
+            forms.TextInput()
+        ])
+
+    def decompress(self, value):
+        # 'firstvalue secondvalue'
+        if value:
+            return value.split(' ')
+        return['', '']
+        # ['firstvalue', 'secondvalue']
+
+
+class NameField(forms.MultiValueField):
+
+    widget = NameWidget
+
+    def __init__(self, *args, **kwargs):
+
+        fields = (
+            forms.CharField(validators=[
+                RegexValidator(
+                    r'[a-zA-Z]+', 'Enter a valid first name (only letters)')
+            ]),  # test
+            forms.CharField(validators=[
+                RegexValidator(
+                    r'[a-zA-Z]+', 'Enter a valid second name (only letters)')
+            ]),  # test
+        )
+
+        super().__init__(fields, *args, **kwargs)
+
+    def compress(self, data_list):
+        # data_list = ['firstvalue', 'secondvalue']
+        return f'{data_list[0]} {data_list[1]}'
+        # 'firstvalue secondvalue'
 
 
 class ContactForm(forms.Form):
-    name = forms.CharField()
+    name = NameField()
     email = forms.EmailField(label='E-mail')
     category = forms.ChoiceField(
         choices=[('question', 'Question'), ('other', 'Other')])
